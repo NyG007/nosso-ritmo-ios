@@ -13,7 +13,8 @@ enum RhythmModel {
     static let dates = ["start", "end", "repeatUntil", "originalDate", "updatedAt"]
     static let uuids = ["id", "parentID", "linkedID"]
     static let doubles = ["target", "duration", "amount"]
-    static let bools = ["completed", "deleted"]
+    // "deleted" would collide with NSManagedObject.isDeleted through KVC.
+    static let bools = ["completed", "removed"]
     static func make() -> NSManagedObjectModel {
         let model = NSManagedObjectModel()
         let space = NSEntityDescription(); space.name = "Space"; space.managedObjectClassName = "NSManagedObject"
@@ -23,10 +24,14 @@ enum RhythmModel {
             value.isOptional = true; value.defaultValue = defaultValue; return value
         }
         space.properties = [attribute("id", .UUIDAttributeType), attribute("title", .stringAttributeType, "Nosso Ritmo")]
-        entry.properties = strings.map { attribute($0, .stringAttributeType, "") } +
-            dates.map { attribute($0, .dateAttributeType) } + uuids.map { attribute($0, .UUIDAttributeType) } +
-            doubles.map { attribute($0, .doubleAttributeType, 0) } + bools.map { attribute($0, .booleanAttributeType, false) } +
-            [attribute("reminderMinutes", .integer64AttributeType, -1)]
+        var fields: [NSPropertyDescription] = []
+        fields.append(contentsOf: strings.map { attribute($0, .stringAttributeType, "") })
+        fields.append(contentsOf: dates.map { attribute($0, .dateAttributeType) })
+        fields.append(contentsOf: uuids.map { attribute($0, .UUIDAttributeType) })
+        fields.append(contentsOf: doubles.map { attribute($0, .doubleAttributeType, 0) })
+        fields.append(contentsOf: bools.map { attribute($0, .booleanAttributeType, false) })
+        fields.append(attribute("reminderMinutes", .integer64AttributeType, -1))
+        entry.properties = fields
         let children = NSRelationshipDescription(); children.name = "entries"; children.destinationEntity = entry
         children.minCount = 0; children.maxCount = 0; children.isOptional = true; children.deleteRule = .cascadeDeleteRule
         let root = NSRelationshipDescription(); root.name = "space"; root.destinationEntity = space
@@ -58,7 +63,7 @@ extension RhythmRecord {
         amount = (object.value(forKey: "amount") as? NSNumber)?.doubleValue ?? 0
         url = object.value(forKey: "url") as? String ?? ""
         completed = object.value(forKey: "completed") as? Bool ?? false
-        deleted = object.value(forKey: "deleted") as? Bool ?? false
+        deleted = object.value(forKey: "removed") as? Bool ?? false
         updatedAt = object.value(forKey: "updatedAt") as? Date ?? .distantPast
     }
     func write(to object: NSManagedObject, previous: RhythmRecord?) {
@@ -68,7 +73,7 @@ extension RhythmRecord {
             "parentID": parentID, "linkedID": linkedID, "identity": identity, "recurrence": recurrence.rawValue,
             "repeatUntil": repeatUntil, "originalDate": originalDate, "reminderMinutes": reminderMinutes,
             "metric": metric.rawValue, "target": target, "duration": duration, "amount": amount, "url": url,
-            "completed": completed, "deleted": deleted, "updatedAt": updatedAt
+            "completed": completed, "removed": deleted, "updatedAt": updatedAt
         ]
         // Assign only changed attributes. Core Data can merge edits to different fields.
         for (key, value) in values {
@@ -95,6 +100,8 @@ final class Persistence: ObservableObject {
         self.demo = demo
         container = NSPersistentCloudKitContainer(name: "NossoRitmo", managedObjectModel: RhythmModel.make())
         let directory = NSPersistentContainer.defaultDirectoryURL()
+        do { try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true) }
+        catch { self.error = error.localizedDescription }
         func description(_ name: String, scope: CKDatabase.Scope?) -> NSPersistentStoreDescription {
             let value = NSPersistentStoreDescription(url: directory.appendingPathComponent(name))
             value.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)

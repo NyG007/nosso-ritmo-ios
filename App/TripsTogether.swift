@@ -204,6 +204,7 @@ struct InvitationView: View {
                         Text("Envie o link para a outra pessoa e peça para abri-lo no iPhone com o Nosso Ritmo instalado, no modo iCloud.").font(.footnote)
                     }
                 }
+                if let message = store.error { Section { Text(message).foregroundStyle(.red) } }
             }.navigationTitle("Nosso espaço").navigationBarTitleDisplayMode(.inline).toolbar { Button("Fechar") { dismiss() } }
         }
     }

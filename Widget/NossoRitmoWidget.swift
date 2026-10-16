@@ -35,6 +35,7 @@ struct RhythmProvider: TimelineProvider {
 }
 struct RhythmWidgetView: View {
     @Environment(\.widgetFamily) var family
+    @Environment(\.colorScheme) var systemScheme
     var entry: RhythmWidgetEntry
     private var pink: Bool { entry.snapshot?.theme == "pink" }
     private var dark: Bool { entry.snapshot?.theme == "dark" }
@@ -76,6 +77,7 @@ struct RhythmWidgetView: View {
         }
         .foregroundStyle(dark ? Color.white : Color.primary)
         .containerBackground(background, for: .widget)
+        .environment(\.colorScheme, dark ? .dark : (["pink", "light"].contains(entry.snapshot?.theme ?? "") ? .light : systemScheme))
         .widgetURL(upcoming.first?.url ?? URL(string: "nossoritmo://agenda"))
         .accessibilityElement(children: .contain)
     }

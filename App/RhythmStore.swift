@@ -2,6 +2,7 @@ import SwiftUI
 import CoreData
 import CloudKit
 import Combine
+import CryptoKit
 
 @MainActor
 final class RhythmStore: ObservableObject {
@@ -68,7 +69,8 @@ final class RhythmStore: ObservableObject {
             if root?.isDeleted != false || !roots.contains(where: { $0.objectID == root?.objectID }) {
                 root = roots.first { $0.objectID.persistentStore == persistence.sharedStore } ?? roots.first
             }
-            records = try objects().map(RhythmRecord.init(object:))
+            let fetched = try objects().map(RhythmRecord.init(object:))
+            records = Array(Dictionary(fetched.map { ($0.id, $0) }, uniquingKeysWith: { $0.updatedAt >= $1.updatedAt ? $0 : $1 }).values)
             if root?.objectID.persistentStore == persistence.sharedStore { waitingForSharedSpace = false }
             if let member = members.first(where: { $0.identity == identity && !identity.isEmpty }) { myID = member.id; profileName = member.title }
             else { myID = nil }
@@ -164,7 +166,13 @@ final class RhythmStore: ObservableObject {
         objectWillChange.send()
     }
     func linkItinerary(_ item: RhythmRecord) {
-        var event = item.linkedID.flatMap { id in records.first { $0.id == id && !$0.deleted } } ?? RhythmRecord(kind: .event, title: item.title)
+        // Stable ID makes retries and offline additions from both devices idempotent.
+        let digest = Array(SHA256.hash(data: Data("nosso-ritmo/itinerary/\(item.id.uuidString)".utf8)))
+        let hex = digest.prefix(16).map { String(format: "%02x", $0) }.joined()
+        let stableID = UUID(uuidString: "\(hex.prefix(8))-\(hex.dropFirst(8).prefix(4))-\(hex.dropFirst(12).prefix(4))-\(hex.dropFirst(16).prefix(4))-\(hex.dropFirst(20).prefix(12))")!
+        let eventID = item.linkedID ?? stableID
+        var event = records.first { $0.id == eventID && !$0.deleted } ?? RhythmRecord(kind: .event, title: item.title)
+        event.id = eventID
         event.title = item.title; event.notes = item.notes; event.start = item.start; event.end = item.end
         event.category = .couple; event.participants = members.map(\.id)
         guard save(event) else { return }
@@ -210,7 +218,7 @@ final class RhythmStore: ObservableObject {
         let weekEnd = calendar.dateInterval(of: .weekOfYear, for: now)?.end ?? now
         let goals = items(.goal).filter { [.outdoors, .streaming].contains($0.category) && $0.metric == .hours }
         let snapshot = WidgetSnapshot(generatedAt: now, weekEnd: weekEnd, theme: UserDefaults.standard.string(forKey: "theme") ?? "system",
-            events: upcoming.prefix(12).map { WidgetEvent(id: $0.id, title: $0.record.title, date: $0.start, url: URL(string: "nossoritmo://event/\($0.record.id.uuidString)")!) },
+            events: upcoming.prefix(12).map { WidgetEvent(id: $0.id, title: $0.record.title, date: $0.start, url: URL(string: "nossoritmo://event/\($0.record.id.uuidString)?at=\($0.start.timeIntervalSince1970)")!) },
             goals: goals.prefix(2).map { WidgetGoal(id: $0.id.uuidString, title: "\($0.category.title) · \(memberNames($0.participants))", value: progress($0), target: $0.target) })
         // Missing App Groups do not prevent the app from saving local records.
         do { try WidgetBridge.write(snapshot) } catch { /* surfaced by widget setup screen / documentation */ }
@@ -220,8 +228,13 @@ final class RhythmStore: ObservableObject {
         guard url.scheme == "nossoritmo" else { return }
         if url.host == "event", let id = UUID(uuidString: url.lastPathComponent) {
             selectedTab = 1; highlightedID = id
-            if let record = records.first(where: { $0.id == id }) { selectedDate = max(record.start, Date()) }
+            if let value = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first(where: { $0.name == "at" })?.value,
+               let timestamp = Double(value), timestamp.isFinite, abs(timestamp) < 1e11 {
+                selectedDate = Date(timeIntervalSince1970: timestamp)
+            } else if let next = nextEvents().first(where: { $0.record.id == id }) { selectedDate = next.start }
+            else if let record = records.first(where: { $0.id == id }) { selectedDate = record.start }
         } else if url.host == "goals" { selectedTab = 2 }
+        else if url.host == "agenda" { selectedTab = 1 }
     }
     func seedDemo() {
         var partner = RhythmRecord(kind: .member, title: "Dani"); partner.identity = "demo-dani"; _ = save(partner)

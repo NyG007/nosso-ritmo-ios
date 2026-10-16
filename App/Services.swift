@@ -1,5 +1,5 @@
 import SwiftUI
-import UserNotifications
+@preconcurrency import UserNotifications
 import WidgetKit
 import CloudKit
 
@@ -35,7 +35,7 @@ actor ReminderService {
         for event in reminders.prefix(60) {
             let content = UNMutableNotificationContent(); content.title = event.record.title
             content.body = "Um momento no Nosso Ritmo está chegando."; content.sound = .default
-            content.userInfo = ["url": "nossoritmo://event/\(event.record.id.uuidString)"]
+            content.userInfo = ["url": "nossoritmo://event/\(event.record.id.uuidString)?at=\(event.start.timeIntervalSince1970)"]
             let date = event.start.addingTimeInterval(-Double(event.record.reminderMinutes) * 60)
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, date.timeIntervalSinceNow), repeats: false)
             try? await center.add(UNNotificationRequest(identifier: "ritmo-\(event.id)", content: content, trigger: trigger))

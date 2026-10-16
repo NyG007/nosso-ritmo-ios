@@ -1,6 +1,6 @@
 import SwiftUI
 import CloudKit
-import UserNotifications
+@preconcurrency import UserNotifications
 
 @MainActor final class InviteInbox: ObservableObject {
     static let shared = InviteInbox()
@@ -142,6 +142,6 @@ struct MainTabs: View {
             NavigationStack { TripsView() }.tabItem { Label("Viagens", systemImage: "suitcase.rolling") }.tag(3)
             NavigationStack { TogetherView() }.tabItem { Label("Nós", systemImage: "heart") }.tag(4)
         }
-        .background(theme == "pink" ? Color(red: 1, green: 0.94, blue: 0.96) : Color(uiColor: .systemGroupedBackground))
+        .rhythmSurface()
     }
 }

@@ -37,7 +37,7 @@ struct TodayView: View {
                 }
                 Text(store.persistence.status).font(.caption).foregroundStyle(.secondary)
             }.padding(20)
-        }.background(Color(uiColor: .systemGroupedBackground)).navigationTitle("Hoje").navigationBarTitleDisplayMode(.inline)
+        }.rhythmSurface().navigationTitle("Hoje").navigationBarTitleDisplayMode(.inline)
     }
 }
 

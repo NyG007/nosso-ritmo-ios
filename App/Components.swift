@@ -1,5 +1,16 @@
 import SwiftUI
 
+struct RhythmSurface: ViewModifier {
+    @AppStorage("theme") var theme = "system"
+    func body(content: Content) -> some View {
+        content.scrollContentBackground(.hidden)
+            .background(theme == "pink" ? Color(red: 1, green: 0.94, blue: 0.96) : Color(uiColor: .systemGroupedBackground))
+    }
+}
+extension View {
+    func rhythmSurface() -> some View { modifier(RhythmSurface()) }
+}
+
 struct RhythmCard<Content: View>: View {
     @ViewBuilder var content: Content
     var body: some View {

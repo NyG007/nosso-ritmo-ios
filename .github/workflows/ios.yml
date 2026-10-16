@@ -33,3 +33,12 @@ jobs:
           name: build-diagnostics
           path: build.log
           if-no-files-found: ignore
+      - name: Launch demo and capture themes
+        run: python3 scripts/simulator_smoke.py
+      - name: Save simulator screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: simulator-screenshots
+          path: build/screenshots/*.png
+          if-no-files-found: ignore
