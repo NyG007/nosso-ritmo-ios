@@ -2,7 +2,9 @@ name: iOS
 on:
   push:
     branches: [main, 'codex/**']
+    paths-ignore: ['docs/**', 'README.md', 'LICENSE']
   pull_request:
+    paths-ignore: ['docs/**', 'README.md', 'LICENSE']
   workflow_dispatch:
 permissions:
   contents: read

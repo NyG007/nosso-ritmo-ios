@@ -1,5 +1,15 @@
 import SwiftUI
 
+struct RhythmAccent: ViewModifier {
+    @AppStorage("theme") var theme = "system"
+    @Environment(\.colorScheme) var scheme
+    func body(content: Content) -> some View {
+        let dark = theme == "dark" || (theme == "system" && scheme == .dark)
+        content.tint(theme == "pink" ? Color(red: 0.77, green: 0.23, blue: 0.42) :
+            (dark ? Color(red: 0.65, green: 0.80, blue: 0.70) : Color(red: 0.31, green: 0.42, blue: 0.36)))
+    }
+}
+
 struct RhythmSurface: ViewModifier {
     @AppStorage("theme") var theme = "system"
     func body(content: Content) -> some View {
@@ -16,7 +26,7 @@ struct RhythmCard<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) { content }
             .frame(maxWidth: .infinity, alignment: .leading).padding(20)
-            .background(.background, in: RoundedRectangle(cornerRadius: 24))
+            .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24))
     }
 }
 struct EmptyHint: View {

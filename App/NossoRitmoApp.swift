@@ -44,7 +44,7 @@ final class RhythmSceneDelegate: NSObject, UIWindowSceneDelegate {
                 if mode.isEmpty { WelcomeView() }
                 else { ModeView(demo: mode == "demo").id(mode) }
             }
-            .tint(theme == "pink" ? Color(red: 0.77, green: 0.23, blue: 0.42) : Color(red: 0.31, green: 0.42, blue: 0.36))
+            .modifier(RhythmAccent())
             .preferredColorScheme(theme == "dark" ? .dark : (theme == "light" || theme == "pink" ? .light : nil))
             .environment(\.locale, Locale(identifier: "pt_BR"))
         }

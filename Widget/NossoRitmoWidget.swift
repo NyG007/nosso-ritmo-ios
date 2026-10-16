@@ -46,7 +46,7 @@ struct RhythmWidgetView: View {
     var body: some View {
         let upcoming = entry.snapshot?.events.filter { $0.date >= entry.date } ?? []
         VStack(alignment: .leading, spacing: 10) {
-            Label("Nosso Ritmo", systemImage: "heart.fill").font(.caption.bold()).foregroundStyle(pink ? Color.pink : Color.accentColor)
+            Label("Nosso Ritmo", systemImage: "heart.fill").font(.caption.bold()).foregroundStyle(.tint)
             if let event = upcoming.first {
                 Link(destination: event.url) {
                     VStack(alignment: .leading, spacing: 5) {
@@ -76,6 +76,7 @@ struct RhythmWidgetView: View {
             Spacer(minLength: 0)
         }
         .foregroundStyle(dark ? Color.white : Color.primary)
+        .tint(pink ? Color(red: 0.77, green: 0.23, blue: 0.42) : (dark ? Color(red: 0.65, green: 0.80, blue: 0.70) : Color(red: 0.31, green: 0.42, blue: 0.36)))
         .containerBackground(background, for: .widget)
         .environment(\.colorScheme, dark ? .dark : (["pink", "light"].contains(entry.snapshot?.theme ?? "") ? .light : systemScheme))
         .widgetURL(upcoming.first?.url ?? URL(string: "nossoritmo://agenda"))
