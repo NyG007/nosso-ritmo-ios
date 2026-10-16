@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="840" viewBox="0 0 1260 840">
+<rect width="1260" height="840" fill="#e8e1d8"/>
+<text x="50" y="50" font-family="Arial" font-size="24" fill="#293c30">Nosso Ritmo · conceito visual dos três temas</text>
+<g transform="translate(45,85)">
+<rect width="375" height="690" rx="38" fill="#f4f1eb" stroke="#263b30" stroke-width="2"/>
+<text x="26" y="42" font-family="Arial" font-size="14" fill="#526c5d">9:41                         Claro</text>
+<text x="26" y="95" font-family="Arial" font-size="17" fill="#526c5d">NOSSO RITMO</text>
+<text x="26" y="144" font-family="Georgia" font-size="29" fill="#263b30">A vida acontece</text>
+<text x="26" y="182" font-family="Georgia" font-size="29" fill="#263b30">nos nossos encontros.</text>
+<text x="26" y="217" font-family="Arial" font-size="15" fill="#526c5d">Alex &amp; Dani</text>
+<rect x="20" y="246" width="335" height="135" rx="24" fill="#ffffff"/>
+<text x="38" y="276" font-family="Arial" font-size="13" fill="#526c5d">NOSSO PRÓXIMO MOMENTO</text>
+<text x="38" y="312" font-family="Georgia" font-size="23" fill="#263b30">Um café sem pressa</text>
+<text x="38" y="344" font-family="Arial" font-size="14" fill="#263b30">Amanhã, 17:00 · A dois</text>
+<text x="26" y="423" font-family="Arial" font-size="18" fill="#263b30">Uma semana no nosso ritmo</text>
+<rect x="20" y="446" width="335" height="82" rx="18" fill="#ffffff"/>
+<text x="38" y="470" font-family="Arial" font-size="15" fill="#263b30">Mais céu, mais nós</text>
+<rect x="38" y="483" width="298" height="5" rx="2" fill="#f4f1eb"/>
+<rect x="38" y="483" width="149" height="5" rx="2" fill="#526c5d"/>
+<text x="38" y="510" font-family="Arial" font-size="12" fill="#526c5d">1,5 de 3 h ao ar livre</text>
+<rect x="20" y="540" width="335" height="82" rx="18" fill="#ffffff"/>
+<text x="38" y="564" font-family="Arial" font-size="15" fill="#263b30">Nossa sessão de cinema</text>
+<rect x="38" y="577" width="298" height="5" rx="2" fill="#f4f1eb"/>
+<rect x="38" y="577" width="149" height="5" rx="2" fill="#526c5d"/>
+<text x="38" y="604" font-family="Arial" font-size="12" fill="#526c5d">1 de 2 h de streaming</text>
+<text x="28" y="665" font-family="Arial" font-size="13" fill="#263b30">Hoje      Agenda      Metas      Viagens      Nós</text>
+</g>
+<g transform="translate(455,85)">
+<rect width="375" height="690" rx="38" fill="#18211d" stroke="#f4f0e7" stroke-width="2"/>
+<text x="26" y="42" font-family="Arial" font-size="14" fill="#9abb9e">9:41                         Escuro</text>
+<text x="26" y="95" font-family="Arial" font-size="17" fill="#9abb9e">NOSSO RITMO</text>
+<text x="26" y="144" font-family="Georgia" font-size="29" fill="#f4f0e7">A vida acontece</text>
+<text x="26" y="182" font-family="Georgia" font-size="29" fill="#f4f0e7">nos nossos encontros.</text>
+<text x="26" y="217" font-family="Arial" font-size="15" fill="#9abb9e">Alex &amp; Dani</text>
+<rect x="20" y="246" width="335" height="135" rx="24" fill="#25332b"/>
+<text x="38" y="276" font-family="Arial" font-size="13" fill="#9abb9e">NOSSO PRÓXIMO MOMENTO</text>
+<text x="38" y="312" font-family="Georgia" font-size="23" fill="#f4f0e7">Um café sem pressa</text>
+<text x="38" y="344" font-family="Arial" font-size="14" fill="#f4f0e7">Amanhã, 17:00 · A dois</text>
+<text x="26" y="423" font-family="Arial" font-size="18" fill="#f4f0e7">Uma semana no nosso ritmo</text>
+<rect x="20" y="446" width="335" height="82" rx="18" fill="#25332b"/>
+<text x="38" y="470" font-family="Arial" font-size="15" fill="#f4f0e7">Mais céu, mais nós</text>
+<rect x="38" y="483" width="298" height="5" rx="2" fill="#18211d"/>
+<rect x="38" y="483" width="149" height="5" rx="2" fill="#9abb9e"/>
+<text x="38" y="510" font-family="Arial" font-size="12" fill="#9abb9e">1,5 de 3 h ao ar livre</text>
+<rect x="20" y="540" width="335" height="82" rx="18" fill="#25332b"/>
+<text x="38" y="564" font-family="Arial" font-size="15" fill="#f4f0e7">Nossa sessão de cinema</text>
+<rect x="38" y="577" width="298" height="5" rx="2" fill="#18211d"/>
+<rect x="38" y="577" width="149" height="5" rx="2" fill="#9abb9e"/>
+<text x="38" y="604" font-family="Arial" font-size="12" fill="#9abb9e">1 de 2 h de streaming</text>
+<text x="28" y="665" font-family="Arial" font-size="13" fill="#f4f0e7">Hoje      Agenda      Metas      Viagens      Nós</text>
+</g>
+<g transform="translate(865,85)">
+<rect width="375" height="690" rx="38" fill="#fff0f3" stroke="#572c3b" stroke-width="2"/>
+<text x="26" y="42" font-family="Arial" font-size="14" fill="#b64b72">9:41                         Rosa</text>
+<text x="26" y="95" font-family="Arial" font-size="17" fill="#b64b72">NOSSO RITMO</text>
+<text x="26" y="144" font-family="Georgia" font-size="29" fill="#572c3b">A vida acontece</text>
+<text x="26" y="182" font-family="Georgia" font-size="29" fill="#572c3b">nos nossos encontros.</text>
+<text x="26" y="217" font-family="Arial" font-size="15" fill="#b64b72">Alex &amp; Dani</text>
+<rect x="20" y="246" width="335" height="135" rx="24" fill="#fffafb"/>
+<text x="38" y="276" font-family="Arial" font-size="13" fill="#b64b72">NOSSO PRÓXIMO MOMENTO</text>
+<text x="38" y="312" font-family="Georgia" font-size="23" fill="#572c3b">Um café sem pressa</text>
+<text x="38" y="344" font-family="Arial" font-size="14" fill="#572c3b">Amanhã, 17:00 · A dois</text>
+<text x="26" y="423" font-family="Arial" font-size="18" fill="#572c3b">Uma semana no nosso ritmo</text>
+<rect x="20" y="446" width="335" height="82" rx="18" fill="#fffafb"/>
+<text x="38" y="470" font-family="Arial" font-size="15" fill="#572c3b">Mais céu, mais nós</text>
+<rect x="38" y="483" width="298" height="5" rx="2" fill="#fff0f3"/>
+<rect x="38" y="483" width="149" height="5" rx="2" fill="#b64b72"/>
+<text x="38" y="510" font-family="Arial" font-size="12" fill="#b64b72">1,5 de 3 h ao ar livre</text>
+<rect x="20" y="540" width="335" height="82" rx="18" fill="#fffafb"/>
+<text x="38" y="564" font-family="Arial" font-size="15" fill="#572c3b">Nossa sessão de cinema</text>
+<rect x="38" y="577" width="298" height="5" rx="2" fill="#fff0f3"/>
+<rect x="38" y="577" width="149" height="5" rx="2" fill="#b64b72"/>
+<text x="38" y="604" font-family="Arial" font-size="12" fill="#b64b72">1 de 2 h de streaming</text>
+<text x="28" y="665" font-family="Arial" font-size="13" fill="#572c3b">Hoje      Agenda      Metas      Viagens      Nós</text>
+</g>
+<text x="50" y="817" font-family="Arial" font-size="14" fill="#48584c">Ilustração de referência — não é captura do app executando. Dados fictícios.</text>
+</svg>

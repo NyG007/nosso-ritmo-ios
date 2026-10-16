@@ -1,0 +1,12 @@
+// Change these identifiers to values registered in your Apple Developer team.
+APP_BUNDLE_ID = com.nyg007.nossoritmo
+WIDGET_BUNDLE_ID = com.nyg007.nossoritmo.widget
+CLOUD_CONTAINER_ID = iCloud.com.nyg007.nossoritmo
+APP_GROUP_ID = group.com.nyg007.nossoritmo
+DEVELOPMENT_TEAM =
+IPHONEOS_DEPLOYMENT_TARGET = 17.0
+SWIFT_VERSION = 5.0
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 1
+CODE_SIGN_STYLE = Automatic
+APS_ENVIRONMENT = development
