@@ -4,7 +4,13 @@
 
 Um calendário independente para cuidar da rotina a dois. App nativo para iPhone, em português, com agenda compartilhada, metas, estudos, academia, viagens, músicas e widgets.
 
-![Conceito visual dos temas claro, escuro e rosa — ilustração, não captura do aplicativo](docs/images/themes.svg)
+<p>
+  <img src="docs/images/today-light.png" alt="Tela Hoje no modo claro" width="240" />
+  <img src="docs/images/today-dark.png" alt="Tela Hoje no modo escuro" width="240" />
+  <img src="docs/images/today-pink.png" alt="Tela Hoje no modo rosa" width="240" />
+</p>
+
+Capturas reais da demonstração em um simulador iPhone 16 Pro. Todos os nomes e conteúdos de exemplo são fictícios.
 
 > Projeto inicial para uso pessoal do casal. O código é público; o conteúdo do casal fica no armazenamento local e no iCloud privado/compartilhado. O GitHub não armazena os compromissos nem as atividades.
 
@@ -98,6 +104,6 @@ Para regenerar o projeto após adicionar arquivos Swift:
 python3 scripts/generate_project.py
 ```
 
-O ícone geométrico e a ilustração de referência podem ser reproduzidos com `python3 scripts/create_assets.py`. A imagem acima é uma ilustração do design; capturas reais e a revisão visual final devem ser feitas no simulador/Mac.
+O ícone geométrico e a [ilustração de referência](docs/images/themes.svg) podem ser reproduzidos com `python3 scripts/create_assets.py`. As capturas acima são geradas por `scripts/simulator_smoke.py`, depois da compilação no Mac. A revisão visual das demais telas, acessibilidade e dispositivos reais ainda precisa seguir o roteiro de testes.
 
 Leia [Arquitetura](docs/ARCHITECTURE.md), [Roteiro de testes](docs/TESTING.md) e [Estado da entrega](docs/STATUS.md). Licença [MIT](LICENSE).
