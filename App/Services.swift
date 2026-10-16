@@ -20,10 +20,22 @@ enum WidgetBridge {
 
 actor ReminderService {
     static let shared = ReminderService()
+    private var pendingUpdate: (events: [Occurrence], enabled: Bool, now: Date)?
+    private var updating = false
     func authorization() async throws -> Bool {
         try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
     }
     func update(events: [Occurrence], enabled: Bool, now: Date) async {
+        pendingUpdate = (events, enabled, now)
+        guard !updating else { return }
+        updating = true
+        defer { updating = false }
+        while let request = pendingUpdate {
+            pendingUpdate = nil
+            await replace(events: request.events, enabled: request.enabled, now: request.now)
+        }
+    }
+    private func replace(events: [Occurrence], enabled: Bool, now: Date) async {
         let center = UNUserNotificationCenter.current()
         let pending = await center.pendingNotificationRequests()
         center.removePendingNotificationRequests(withIdentifiers: pending.filter { $0.identifier.hasPrefix("ritmo-") }.map(\.identifier))

@@ -9,14 +9,14 @@ Código inicial de todas as áreas do plano incluído: app SwiftUI, domínio tes
 | Verificação | Estado |
 | --- | --- |
 | Integridade de referências do projeto, plists, entitlements, assets e esquema | Verificada por `scripts/verify_project.py` no Windows |
-| Testes de domínio Swift | Preparados; consultar resultado do GitHub Actions |
-| Compilação app + widget | Preparada no workflow macOS; consultar GitHub Actions |
+| Testes de domínio Swift | 18 testes passaram em macOS no GitHub Actions |
+| Compilação app + widget | Compilação Debug para iOS Simulator aprovada no GitHub Actions |
 | Revisão visual no simulador | Pendente de Mac/Xcode; a imagem do README é ilustrativa |
 | Convite e sincronização em duas contas reais | Pendente de configuração Apple Developer e dois iPhones |
 | Notificações e widget em dispositivo real | Pendente de assinatura e instalação |
 | Envio ao TestFlight | Pendente de assinatura Apple Developer e configuração App Store Connect |
 
-O ambiente de implementação é Windows e não possui Xcode nem compilador Swift. Resultados de compilação executados remotamente devem ser registrados nesta tabela após confirmação. Os testes físicos continuam necessários mesmo quando a CI passa.
+O ambiente local de implementação é Windows e não possui Xcode nem compilador Swift. A compilação e os testes acima foram executados remotamente em macOS na [execução de validação](https://github.com/NyG007/nosso-ritmo-ios/actions/runs/38832822332). Consulte também a [execução mais recente](https://github.com/NyG007/nosso-ritmo-ios/actions/workflows/ios.yml) para alterações posteriores. Os testes físicos continuam necessários mesmo quando a CI passa.
 
 ## Limitações conhecidas
 

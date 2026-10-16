@@ -66,8 +66,8 @@ extension RhythmRecord {
         deleted = object.value(forKey: "removed") as? Bool ?? false
         updatedAt = object.value(forKey: "updatedAt") as? Date ?? .distantPast
     }
-    func write(to object: NSManagedObject, previous: RhythmRecord?) {
-        let values: [String: Any?] = [
+    private var fields: [String: Any?] {
+        [
             "id": id, "kind": kind.rawValue, "title": title, "notes": notes, "category": category.rawValue,
             "start": start, "end": end, "participants": participants.map(\.uuidString).sorted().joined(separator: ","),
             "parentID": parentID, "linkedID": linkedID, "identity": identity, "recurrence": recurrence.rawValue,
@@ -75,8 +75,13 @@ extension RhythmRecord {
             "metric": metric.rawValue, "target": target, "duration": duration, "amount": amount, "url": url,
             "completed": completed, "removed": deleted, "updatedAt": updatedAt
         ]
+    }
+    func write(to object: NSManagedObject, previous: RhythmRecord?) {
+        let values = fields
+        let baseline = previous?.fields
         // Assign only changed attributes. Core Data can merge edits to different fields.
         for (key, value) in values {
+            if key != "updatedAt", let baseline, ((baseline[key] ?? nil) as? NSObject) == (value as? NSObject) { continue }
             let old = object.value(forKey: key) as? NSObject
             let new = value as? NSObject
             if old != new { object.setValue(value, forKey: key) }

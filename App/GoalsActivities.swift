@@ -29,7 +29,8 @@ struct GoalEditor: View {
     @EnvironmentObject var store: RhythmStore
     @Environment(\.dismiss) var dismiss
     @State var item: RhythmRecord
-    init(item: RhythmRecord? = nil) { _item = State(initialValue: item ?? RhythmRecord(kind: .goal, title: "")) }
+    let baseline: RhythmRecord?
+    init(item: RhythmRecord? = nil) { _item = State(initialValue: item ?? RhythmRecord(kind: .goal, title: "")); baseline = item }
     var body: some View {
         NavigationStack {
             Form {
@@ -51,7 +52,7 @@ struct GoalEditor: View {
             }.navigationTitle("Nossa meta").navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) { Button("Cancelar") { dismiss() } }
-                    ToolbarItem(placement: .confirmationAction) { Button("Salvar") { if store.save(item) { dismiss() } }.disabled(RhythmValidation.message(for: item) != nil) }
+                    ToolbarItem(placement: .confirmationAction) { Button("Salvar") { if store.save(item, baseline: baseline) { dismiss() } }.disabled(RhythmValidation.message(for: item) != nil) }
                 }
         }
     }
@@ -130,10 +131,12 @@ struct SessionEditor: View {
     @Environment(\.dismiss) var dismiss
     @State var item: RhythmRecord
     @State var minutes: Double
+    let baseline: RhythmRecord?
     init(category: Category, item: RhythmRecord? = nil) {
         var value = item ?? RhythmRecord(kind: .session, title: "")
         value.category = category; value.completed = true
         _item = State(initialValue: value); _minutes = State(initialValue: item.map { $0.duration / 60 } ?? 30)
+        baseline = item
     }
     var body: some View {
         NavigationStack {
@@ -149,9 +152,12 @@ struct SessionEditor: View {
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) { Button("Cancelar") { dismiss() } }
                     ToolbarItem(placement: .confirmationAction) { Button("Salvar") {
-                        item.duration = minutes * 60; item.end = item.start.addingTimeInterval(item.duration)
+                        item.duration = minutes * 60
+                        if baseline == nil || baseline?.duration != item.duration || baseline?.start != item.start {
+                            item.end = item.start.addingTimeInterval(item.duration)
+                        }
                         if item.participants.isEmpty { item.participants = store.members.map(\.id) }
-                        if store.save(item) { dismiss() }
+                        if store.save(item, baseline: baseline) { dismiss() }
                     }.disabled(minutes <= 0 || !minutes.isFinite || item.title.trimmingCharacters(in: .whitespaces).isEmpty) }
                 }
         }
@@ -183,10 +189,12 @@ struct SimpleEditor: View {
     @EnvironmentObject var store: RhythmStore
     @Environment(\.dismiss) var dismiss
     @State var item: RhythmRecord
+    let baseline: RhythmRecord?
     init(kind: RecordKind, category: Category = .couple, parentID: UUID? = nil, item: RhythmRecord? = nil) {
         var value = item ?? RhythmRecord(kind: kind, title: "")
         if item == nil { value.category = category; value.parentID = parentID }
         _item = State(initialValue: value)
+        baseline = item
     }
     var body: some View {
         NavigationStack {
@@ -211,7 +219,7 @@ struct SimpleEditor: View {
                     ToolbarItem(placement: .cancellationAction) { Button("Cancelar") { dismiss() } }
                     ToolbarItem(placement: .confirmationAction) { Button("Salvar") {
                         if item.kind == .music && item.participants.isEmpty { item.participants = store.myID.map { [$0] } ?? [] }
-                        if store.save(item) {
+                        if store.save(item, baseline: baseline) {
                             if item.kind == .itinerary && item.linkedID != nil { store.linkItinerary(item) }
                             dismiss()
                         }

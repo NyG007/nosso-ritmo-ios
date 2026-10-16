@@ -17,7 +17,7 @@ Campos são atributos separados, com relações inversas `Space.entries`/`Entry.
 
 Dois stores SQLite espelhados por `NSPersistentCloudKitContainer`: privado para o proprietário e compartilhado para o convidado. Demonstração usa um terceiro store SQLite sem CloudKit. O timer e as preferências ficam em UserDefaults; o timer é separado por modo e UUID do espaço.
 
-O contexto principal importa mudanças automaticamente e aplica `NSMergeByPropertyObjectTrumpMergePolicy`: edições locais em campos alterados prevalecem em conflitos desse contexto; os demais campos podem incorporar mudanças externas. Não há histórico colaborativo nem garantia de edição simultânea sem perda no mesmo campo. Exclusões são tombstones (`deleted`) para manter referências e propagar a remoção; a interface não oferece lixeira.
+O contexto principal importa mudanças automaticamente e aplica `NSMergeByPropertyObjectTrumpMergePolicy`: edições locais em campos alterados prevalecem em conflitos desse contexto; os demais campos podem incorporar mudanças externas. Os formulários comparam com seu estado inicial para não regravar campos não editados. Não há histórico colaborativo nem garantia de edição simultânea sem perda no mesmo campo. Exclusões são tombstones (`deleted` no domínio, `removed` no Core Data para evitar colisão com `isDeleted`) para manter referências e propagar a remoção; a interface não oferece lixeira.
 
 A criação do convite usa `CKShare` privado, busca a segunda conta pelo e-mail, define `.readWrite`, salva o share no CloudKit e informa o Core Data com `persistUpdatedShare`. Convites pendentes ocupam a segunda vaga. O link é enviado pela pessoa por meio da folha de compartilhamento do sistema. A aceitação é capturada pelos delegates do app/scene.
 
@@ -33,7 +33,7 @@ O cronômetro calcula duração por timestamps, sem depender de executar código
 
 ## Integrações locais
 
-Roteiro mantém `linkedID` do compromisso: adicionar novamente atualiza o mesmo registro. Editar a parada atualiza o compromisso vinculado. Editar o compromisso diretamente não modifica a parada; a parada é a origem da próxima atualização. Excluir o compromisso limpa o vínculo para permitir adicioná-lo novamente.
+Roteiro mantém `linkedID` do compromisso e deriva um identificador estável da parada: adicionar novamente atualiza o mesmo registro, inclusive em tentativas nos dois aparelhos. Editar a parada atualiza o compromisso vinculado. Editar o compromisso diretamente não modifica a parada; a parada é a origem da próxima atualização. Excluir o compromisso limpa o vínculo para permitir adicioná-lo novamente.
 
 O app escreve atomicamente `snapshot.json` no App Group e pede recarga ao WidgetKit. A extensão monta timelines que retiram compromissos passados e zeram o progresso quando a semana termina. O sistema controla o momento real das atualizações.
 

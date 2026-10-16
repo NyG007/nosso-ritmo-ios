@@ -1,5 +1,7 @@
 # Nosso Ritmo 💞
 
+[![iOS](https://github.com/NyG007/nosso-ritmo-ios/actions/workflows/ios.yml/badge.svg)](https://github.com/NyG007/nosso-ritmo-ios/actions/workflows/ios.yml)
+
 Um calendário independente para cuidar da rotina a dois. App nativo para iPhone, em português, com agenda compartilhada, metas, estudos, academia, viagens, músicas e widgets.
 
 ![Conceito visual dos temas claro, escuro e rosa — ilustração, não captura do aplicativo](docs/images/themes.svg)
@@ -88,7 +90,7 @@ swift test --parallel
 python3 scripts/verify_project.py
 ```
 
-O GitHub Actions executa a verificação estrutural, os testes Swift de calendário/metas/cronômetro e a compilação do app e widget para simulador em macOS. Não usa certificados ou credenciais Apple. O workflow não valida sincronização real entre contas.
+O GitHub Actions executa a verificação estrutural, 18 testes Swift de calendário/metas/cronômetro, a compilação do app e widget para simulador em macOS e a abertura da demonstração nos três temas. As capturas reais ficam no artefato `simulator-screenshots` da execução. Não usa certificados ou credenciais Apple. O workflow não valida sincronização real entre contas.
 
 Para regenerar o projeto após adicionar arquivos Swift:
 

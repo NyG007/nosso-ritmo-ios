@@ -79,6 +79,7 @@ struct ModeView: View {
     var body: some View {
         LoadedView(persistence: store.persistence)
             .environmentObject(store)
+            .environment(\.calendar, store.calendar)
             .alert("Vamos ajustar isso", isPresented: Binding(get: { store.error != nil || store.persistence.error != nil }, set: { if !$0 { store.error = nil; store.persistence.error = nil } })) {
                 Button("Entendi", role: .cancel) { store.error = nil; store.persistence.error = nil }
             } message: { Text(store.error ?? store.persistence.error ?? "") }

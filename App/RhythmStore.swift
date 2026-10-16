@@ -70,7 +70,7 @@ final class RhythmStore: ObservableObject {
                 root = roots.first { $0.objectID.persistentStore == persistence.sharedStore } ?? roots.first
             }
             let fetched = try objects().map(RhythmRecord.init(object:))
-            records = Array(Dictionary(fetched.map { ($0.id, $0) }, uniquingKeysWith: { $0.updatedAt >= $1.updatedAt ? $0 : $1 }).values)
+            records = Array(Dictionary(fetched.map { ($0.id, $0) }, uniquingKeysWith: { $0.updatedAt >= $1.updatedAt ? $0 : $1 }).values).sorted { $0.start < $1.start }
             if root?.objectID.persistentStore == persistence.sharedStore { waitingForSharedSpace = false }
             if let member = members.first(where: { $0.identity == identity && !identity.isEmpty }) { myID = member.id; profileName = member.title }
             else { myID = nil }
@@ -109,7 +109,7 @@ final class RhythmStore: ObservableObject {
         var member = RhythmRecord(kind: .member, title: name); member.identity = identity
         if save(member) { myID = member.id; profileName = name }
     }
-    @discardableResult func save(_ source: RhythmRecord) -> Bool {
+    @discardableResult func save(_ source: RhythmRecord, baseline: RhythmRecord? = nil) -> Bool {
         guard let root, let store = root.objectID.persistentStore else { error = "Crie ou aceite um espaço do casal primeiro."; return false }
         if let message = RhythmValidation.message(for: source), !source.deleted { error = message; return false }
         do {
@@ -117,7 +117,7 @@ final class RhythmStore: ObservableObject {
             let existing = try objects().first { $0.value(forKey: "id") as? UUID == value.id }
             let object = existing ?? NSEntityDescription.insertNewObject(forEntityName: "Entry", into: persistence.context)
             if existing == nil { persistence.context.assign(object, to: store); object.setValue(root, forKey: "space") }
-            value.write(to: object, previous: existing.map(RhythmRecord.init(object:)))
+            value.write(to: object, previous: existing == nil ? nil : baseline)
             try persistence.save(); reload(); return true
         } catch { self.error = error.localizedDescription; persistence.context.rollback(); reload(); return false }
     }
@@ -133,7 +133,7 @@ final class RhythmStore: ObservableObject {
     }
     func editOccurrence(_ occurrence: Occurrence, edited: RhythmRecord?, following: Bool) {
         let original = occurrence.record
-        if original.recurrence == .never { if let edited { _ = save(edited) } else { delete(original) }; return }
+        if original.recurrence == .never { if let edited { _ = save(edited, baseline: original) } else { delete(original) }; return }
         if following {
             var truncated = records.first(where: { $0.id == original.id }) ?? original
             truncated.repeatUntil = occurrence.originalStart

@@ -24,6 +24,19 @@ struct TodayView: View {
                     } else { Text("Que tal reservar um tempo para vocês?").foregroundStyle(.secondary) }
                     Button("Abrir agenda", systemImage: "arrow.up.right") { store.selectedTab = 1 }
                 }
+                RhythmCard {
+                    Text("Nosso dia").font(.headline)
+                    let day = store.calendar.dateInterval(of: .day, for: Date())!
+                    let planned = store.occurrences(in: day)
+                    let completed = store.items(.session).filter { day.contains($0.start) && $0.start < day.end }
+                    if planned.isEmpty && completed.isEmpty { Text("Hoje ainda tem espaço para um momento de vocês.").foregroundStyle(.secondary) }
+                    ForEach(planned) { event in
+                        Button { store.selectedDate = event.start; store.selectedTab = 1 } label: { EventRow(occurrence: event) }.buttonStyle(.plain)
+                    }
+                    ForEach(completed) { session in
+                        Label("\(session.title) · \(Int(session.duration / 60)) min concluídos", systemImage: "checkmark.circle").font(.subheadline)
+                    }
+                }
                 Text("Cuidar da nossa rotina").font(.title3.bold())
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 12) {
                     ForEach(Category.allCases.filter { $0 != .couple }) { category in
@@ -70,11 +83,13 @@ struct EventEditor: View {
     @EnvironmentObject var store: RhythmStore
     @Environment(\.dismiss) var dismiss
     @State var item: RhythmRecord
+    let baseline: RhythmRecord?
     var onSave: ((RhythmRecord) -> Bool)?
     init(date: Date, item: RhythmRecord? = nil, onSave: ((RhythmRecord) -> Bool)? = nil) {
         var event = item ?? RhythmRecord(kind: .event, title: "")
         if item == nil { event.start = date; event.end = date.addingTimeInterval(3600) }
         _item = State(initialValue: event); self.onSave = onSave
+        baseline = item
     }
     var body: some View {
         NavigationStack {
@@ -97,7 +112,7 @@ struct EventEditor: View {
                     ToolbarItem(placement: .cancellationAction) { Button("Cancelar") { dismiss() } }
                     ToolbarItem(placement: .confirmationAction) { Button("Salvar") {
                         if item.participants.isEmpty { item.participants = store.members.map(\.id) }
-                        if onSave?(item) ?? store.save(item) { dismiss() }
+                        if onSave?(item) ?? store.save(item, baseline: baseline) { dismiss() }
                     }.disabled(RhythmValidation.message(for: item) != nil) }
                 }
         }
